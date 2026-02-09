@@ -8,6 +8,7 @@ local GUI = require("GUI")
 local paths = require("Paths")
 local text = require("Text")
 local number = require("Number")
+local Error = require("Error")
 
 --------------------------------------------------------------------------------
 
@@ -255,35 +256,8 @@ function system.call(method, ...)
 
 	local function tracebackMethod(xpcallTraceback)
 		local debugTraceback = debug.traceback()
-		local path, line, tailCallsStart = debugTraceback
-		
-		while true do
-			tailCallsStart = path:find("%.%.%.tail calls%.%.%.%)")
-
-			if tailCallsStart then
-				path = path:sub(tailCallsStart + 17)
-			else
-				break
-			end
-		end
-
-		local iter = path:gmatch("\t+([^:]+%.lua):(%d+):")
-		iter()
-		
-		path, line = iter()
-
-		-- Weird case on some server machines, unable to reproduce,
-		-- seems like traceback parsing error
-		-- TODO: replace this when appropriate error reason will be found
-		if not path then
-			return nil
-		end
-
-		return {
-			path = path,
-			line = tonumber(line),
-			traceback = tostring(xpcallTraceback) .. "\n" .. debugTraceback
-		}
+		-- Use robust error parsing with multiple fallback strategies
+		return Error.parseTraceback(xpcallTraceback, debugTraceback)
 	end
 	
 	local xpcallSuccess, xpcallReason = xpcall(launchMethod, tracebackMethod)
