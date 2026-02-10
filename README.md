@@ -27,13 +27,36 @@ MineOS是一个拥有GUI的操作系统，运行在Minecraft模组Open Computers
 
 ## 如何安装?
 
-最简单的方式是使用默认的`pastebin`脚本。插入一个OpenOS的软盘到计算机当中，再插入一个Internet卡，启动电脑并在控制台中输入下列命令以安装MineOS：
+### 方法一：使用安装脚本（推荐）
 
-	pastebin run PDE3eVsL
+插入一个OpenOS的软盘到计算机当中，再插入一个Internet卡，启动电脑并在控制台中输入下列命令：
 
-如果由于某种原因无法使用pastebin网站，请使用替代安装命令：
+```lua
+wget -f https://raw.githubusercontent.com/CaeliaEve/MineOS/master/Installer/OpenOS.lua /tmp/installer.lua && /tmp/installer.lua
+```
 
-	wget -f https://raw.githubusercontent.com/CaeliaEve/MineOS/master/Installer/OpenOS.lua /tmp/installer.lua && /tmp/installer.lua
+**如果遇到 "address is not allowed" 错误**，这是因为 OpenComputers 的安全白名单限制了 wget 访问的域名。请使用以下方法配置白名单：
+
+```lua
+-- 在终端运行以下命令配置白名单
+echo "https://raw.githubusercontent.com" > /home/.wget-allow
+echo "https://github.com" >> /home/.wget-allow
+
+-- 然后重新运行安装命令
+wget -f https://raw.githubusercontent.com/CaeliaEve/MineOS/master/Installer/OpenOS.lua /tmp/installer.lua && /tmp/installer.lua
+```
+
+### 方法二：使用 Pastebin（需要配置白名单）
+
+如果你更喜欢使用 pastebin，可以使用原版安装脚本（注意：这会从原始仓库安装）：
+
+```
+pastebin run PDE3eVsL
+```
+
+过一会儿，一个制作优良的系统安装程序将会被启动。
+安装程序将提示你选择你的首选语言、选择并格式化引导卷、创建用户配置文件并修改一些设置。
+之后，系统便已安装成功。
 
 过一会儿，一个制作优良的系统安装程序将会被启动。
 安装程序将提示你选择你的首选语言、选择并格式化引导卷、创建用户配置文件并修改一些设置。
